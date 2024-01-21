@@ -13,7 +13,8 @@ const setuDb = async () => {
 
     CREATE TABLE planets (
         id SERIAL NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        image TEXT
     );
     `)
     await db.none(`INSERT INTO planets (name) VALUES ('Earth')`)
@@ -81,6 +82,20 @@ const deleteById = async (req: Request, res: Response) => {
     await db.none(`DELETE FROM planets id=$1`, Number(id))
     res.status(200).json({ msg: "Post deleted" });
 }
+
+const createImage = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const fileName = req.file?.path;
+    if (fileName){
+      await db.none(`UPDATE planets SET image:$2 WHERE id=$1`, [id, fileName]);
+        res.status(201).json({msg: "Image updated"});
+    } else {
+        res.status(400).json({msg: "Image not updated"})
+    }
+};
+
+//non mi fa caricare l'immagine su postman non so perchè, anche seguendo i video non esce, se ne carichi te una allora vuol dire che è solo un mio problema locale
+
 console.log(planets);
 
-export { getAll, getById, create, updateById, deleteById }
+export { getAll, getById, create, updateById, deleteById, createImage }
