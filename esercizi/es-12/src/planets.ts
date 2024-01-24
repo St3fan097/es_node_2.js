@@ -1,26 +1,7 @@
 import { Request, Response } from "express";
 import Joi from "joi";
-/* import Joi from "joi"; */
-import pgPromise from "pg-promise";
+import { db } from "./db.js";
 
-const db = pgPromise()("postgres://postgres:PASSWORD@localhost:5432/esercizi");
-console.log(db);
-
-
-const setuDb = async () => {
-    await db.none(`
-    DROP TABLE IF EXISTS planets;
-
-    CREATE TABLE planets (
-        id SERIAL NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL,
-        image TEXT
-    );
-    `)
-    await db.none(`INSERT INTO planets (name) VALUES ('Earth')`)
-    await db.none(`INSERT INTO planets (name) VALUES ('Mars')`)
-}
-setuDb()
 
 type Planet = {
     id: number,
@@ -93,8 +74,6 @@ const createImage = async (req: Request, res: Response) => {
         res.status(400).json({msg: "Image not updated"})
     }
 };
-
-//non mi fa caricare l'immagine su postman non so perchè, anche seguendo i video non esce, se ne carichi te una allora vuol dire che è solo un mio problema locale
 
 console.log(planets);
 
