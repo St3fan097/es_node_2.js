@@ -3,6 +3,7 @@ import "express-async-errors";
 import morgan from "morgan";
 import { getAll, getById, create, updateById, deleteById, createImage } from "./planets.js";
 import multer from "multer";
+import { logIn, signUp } from "./users.js"
 
 //mi riferisco al server express
 
@@ -38,6 +39,10 @@ app.put("/api/planets/:id", updateById);
 app.delete("/api/planets/:id", deleteById)
 
 app.post("/api/planets/:id/image", upload.single("image"), createImage)
+
+app.post("/api/users/signup", signUp);
+
+app.post("/api/users/login", logIn);
 
 //avvio server
 app.listen(port, () => {
